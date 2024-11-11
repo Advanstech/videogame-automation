@@ -1,21 +1,25 @@
-// src/main/java/models/VideoGame.java
 package models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDate;
 
 public class VideoGame {
     private Integer id;
     private String name;
-    private String releaseDate;
+
+    @JsonProperty("release_date")
+    private LocalDate releaseDate;
+
     private Integer reviewScore;
     private String category;
     private String rating;
 
     // Default constructor
-    public VideoGame() {}
+    public VideoGame() {
+    }
 
     // Constructor with all fields
-    public VideoGame(Integer id, String name, String releaseDate,
+    public VideoGame(Integer id, String name, LocalDate releaseDate,
                      Integer reviewScore, String category, String rating) {
         this.id = id;
         this.name = name;
@@ -26,26 +30,64 @@ public class VideoGame {
     }
 
     // Getters and Setters
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public Integer getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public String getReleaseDate() { return releaseDate; }
-    public void setReleaseDate(String releaseDate) { this.releaseDate = releaseDate; }
+    public String getName() {
+        return name;
+    }
 
-    public Integer getReviewScore() { return reviewScore; }
-    public void setReviewScore(Integer reviewScore) { this.reviewScore = reviewScore; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
+    public LocalDate getReleaseDate() {
+        return releaseDate;
+    }
 
-    public String getRating() { return rating; }
-    public void setRating(String rating) { this.rating = rating; }
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public Integer getReviewScore() {
+        return reviewScore;
+    }
+
+    public void setReviewScore(Integer reviewScore) {
+        this.reviewScore = reviewScore;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
 
     // ToString method for better logging
     @Override
     public String toString() {
+        return "VideoGame{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", releaseDate=" + releaseDate +
+                ", reviewScore=" + reviewScore +
+                ", category='" + category + '\'' +
+                ", rating='" + rating + '\'' +
+                '}';
     }
 }

@@ -15,19 +15,14 @@ public class ConfigLoader {
 
     private void loadProperties() {
         try {
-            // First try to load test config if available
-            InputStream testConfig = getClass().getClassLoader()
-                    .getResourceAsStream("test-config.properties");
+            // Load configuration from properties file
+            InputStream configStream = getClass().getClassLoader()
+                    .getResourceAsStream("config.properties");
 
-            if (testConfig != null) {
-                properties.load(testConfig);
+            if (configStream != null) {
+                properties.load(configStream);
             } else {
-                // Fall back to main config if test config is not available
-                InputStream mainConfig = getClass().getClassLoader()
-                        .getResourceAsStream("config.properties");
-                if (mainConfig != null) {
-                    properties.load(mainConfig);
-                }
+                throw new RuntimeException("Configuration file not found");
             }
 
             // Override with environment variables if they exist
@@ -39,17 +34,13 @@ public class ConfigLoader {
     }
 
     private void loadEnvironmentVariables() {
-        // First try to load from .env file
-        String username = EnvLoader.getEnvVariable("API_USERNAME");
-        String password = EnvLoader.getEnvVariable("API_PASSWORD");
-
-        // If .env values are null, try system environment variables
-        if (username == null) username = System.getenv("API_USERNAME");
-        if (password == null) password = System.getenv("API_PASSWORD");
+        // Load from system environment variables
+        String apiBaseUrl = System.getenv("API_BASE_URL");
+        String apiAuthToken = System.getenv("API_AUTH_TOKEN");
 
         // Only override if environment variables are present
-        if (username != null) properties.setProperty("api.auth.username", username);
-        if (password != null) properties.setProperty("api.auth.password", password);
+        if (apiBaseUrl != null) properties.setProperty("api.base.url", apiBaseUrl);
+        if (apiAuthToken != null) properties.setProperty("api.auth.token", apiAuthToken);
     }
 
     public static ConfigLoader getInstance() {
