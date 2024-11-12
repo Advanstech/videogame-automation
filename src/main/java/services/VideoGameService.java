@@ -11,7 +11,9 @@ public class VideoGameService {
     private final String basePath;
 
     public VideoGameService() {
-        this.basePath = ConfigLoader.getInstance().getProperty("api.videogames.path");
+        this.basePath = ConfigLoader.getInstance().getProperty("api.endpoint.videogames");
+        System.out.println("VideoGameService Base Path: " + basePath);
+
     }
 
     public Response createVideoGame(VideoGameRequest request) {

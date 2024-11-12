@@ -18,9 +18,9 @@ public class BaseTest {
     public static void setup() {
         // Initialize test configuration
         configLoader = ConfigLoader.getInstance();
-
         // Set up RestAssured base configuration
         RestAssured.baseURI = configLoader.getProperty("api.base.url");
+        System.out.println("Base URI: " + RestAssured.baseURI);
 
         // Build default request specification
         requestSpec = new RequestSpecBuilder()

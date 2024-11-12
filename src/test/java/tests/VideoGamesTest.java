@@ -5,6 +5,7 @@ import io.restassured.response.Response;
 import models.VideoGame;
 import models.VideoGameRequest;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import services.VideoGameService;
 import utils.ReportLogger;
 
@@ -12,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Epic("Video Game API Tests")
 @Feature("Video Game CRUD Operations")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestMethodOrder(OrderAnnotation.class)
 public class VideoGamesTest extends BaseTest {
     private final VideoGameService videoGameService;
     private static Integer createdGameId;
