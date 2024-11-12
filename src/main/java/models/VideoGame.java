@@ -7,7 +7,7 @@ public class VideoGame {
     private Integer id;
     private String name;
 
-    @JsonProperty("release_date")
+    @JsonProperty("releaseDate")
     private LocalDate releaseDate;
 
     private Integer reviewScore;
@@ -15,12 +15,10 @@ public class VideoGame {
     private String rating;
 
     // Default constructor
-    public VideoGame() {
-    }
+    public VideoGame() { }
 
     // Constructor with all fields
-    public VideoGame(Integer id, String name, LocalDate releaseDate,
-                     Integer reviewScore, String category, String rating) {
+    public VideoGame(Integer id, String name, LocalDate releaseDate, Integer reviewScore, String category, String rating) {
         this.id = id;
         this.name = name;
         this.releaseDate = releaseDate;

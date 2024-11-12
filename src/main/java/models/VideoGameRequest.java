@@ -1,4 +1,3 @@
-// src/main/java/models/VideoGameRequest.java
 package models;
 
 public class VideoGameRequest {
@@ -42,23 +41,60 @@ public class VideoGameRequest {
         }
 
         public VideoGameRequest build() {
+            request.validate();
             return request;
         }
     }
 
     // Getters and Setters
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getReleaseDate() { return releaseDate; }
-    public void setReleaseDate(String releaseDate) { this.releaseDate = releaseDate; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public Integer getReviewScore() { return reviewScore; }
-    public void setReviewScore(Integer reviewScore) { this.reviewScore = reviewScore; }
+    public String getReleaseDate() {
+        return releaseDate;
+    }
 
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 
-    public String getRating() { return rating; }
-    public void setRating(String rating) { this.rating = rating; }
+    public Integer getReviewScore() {
+        return reviewScore;
+    }
+
+    public void setReviewScore(Integer reviewScore) {
+        this.reviewScore = reviewScore;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    // Validation method
+    private void validate() {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }
+        if (releaseDate == null || releaseDate.isEmpty()) {
+            throw new IllegalArgumentException("Release date cannot be null or empty");
+        }
+        // Add more validation as needed
+    }
 }

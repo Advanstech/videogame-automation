@@ -28,35 +28,25 @@ public class VideoGamesTest extends BaseTest {
     @Description("Verify that a new video game can be created successfully")
     @Severity(SeverityLevel.CRITICAL)
     public void createVideoGame() {
-        try {
-            ReportLogger.startTest("Create New Video Game");
+        ReportLogger.startTest("Create New Video Game");
+        VideoGameRequest request = new VideoGameRequest.Builder()
+                .withName("Super Mario Odyssey")
+                .withReleaseDate("2017-10-27")
+                .withReviewScore(97)
+                .withCategory("Platform")
+                .withRating("E")
+                .build();
 
-            // Arrange
-            VideoGameRequest request = new VideoGameRequest.Builder()
-                    .withName("Super Mario Odyssey")
-                    .withReleaseDate("2017-10-27")
-                    .withReviewScore(97)
-                    .withCategory("Platform")
-                    .withRating("E")
-                    .build();
+        Response response = videoGameService.createVideoGame(request);
+        ReportLogger.logResponse(response.getStatusCode(), response.getBody().asString());
 
-            // Act
-            Response response = videoGameService.createVideoGame(request);
-            ReportLogger.logResponse(response.getStatusCode(), response.getBody().asString());
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        VideoGame createdGame = response.as(VideoGame.class);
+        createdGameId = createdGame.getId();
+        assertThat(createdGame.getName()).isEqualTo(request.getName());
+        assertThat(createdGame.getCategory()).isEqualTo(request.getCategory());
 
-            // Assert
-            assertThat(response.getStatusCode()).isEqualTo(200);
-            VideoGame createdGame = response.as(VideoGame.class);
-            createdGameId = createdGame.getId();
-
-            assertThat(createdGame.getName()).isEqualTo(request.getName());
-            assertThat(createdGame.getCategory()).isEqualTo(request.getCategory());
-
-            ReportLogger.info("Successfully created new video game");
-        } catch (Exception e) {
-            ReportLogger.error("Test failed", e);
-            throw e;
-        }
+        ReportLogger.info("Successfully created new video game");
     }
 
     @Test
@@ -66,35 +56,25 @@ public class VideoGamesTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void updateVideoGame() {
         Assumptions.assumeTrue(createdGameId != null, "Game ID should not be null");
+        ReportLogger.startTest("Update Video Game");
 
-        try {
-            ReportLogger.startTest("Update Video Game");
+        VideoGameRequest updatedRequest = new VideoGameRequest.Builder()
+                .withName("Super Mario Odyssey Updated")
+                .withReleaseDate("2017-10-27")
+                .withReviewScore(98)
+                .withCategory("Platform")
+                .withRating("E")
+                .build();
 
-            // Arrange
-            VideoGameRequest updatedRequest = new VideoGameRequest.Builder()
-                    .withName("Super Mario Odyssey Updated")
-                    .withReleaseDate("2017-10-27")
-                    .withReviewScore(98)
-                    .withCategory("Platform")
-                    .withRating("E")
-                    .build();
+        Response response = videoGameService.updateVideoGame(createdGameId, updatedRequest);
+        ReportLogger.logResponse(response.getStatusCode(), response.getBody().asString());
 
-            // Act
-            Response response = videoGameService.updateVideoGame(createdGameId, updatedRequest);
-            ReportLogger.logResponse(response.getStatusCode(), response.getBody().asString());
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        VideoGame updatedGame = response.as(VideoGame.class);
+        assertThat(updatedGame.getName()).isEqualTo(updatedRequest.getName());
+        assertThat(updatedGame.getReviewScore()).isEqualTo(updatedRequest.getReviewScore());
 
-            // Assert
-            assertThat(response.getStatusCode()).isEqualTo(200);
-            VideoGame updatedGame = response.as(VideoGame.class);
-
-            assertThat(updatedGame.getName()).isEqualTo(updatedRequest.getName());
-            assertThat(updatedGame.getReviewScore()).isEqualTo(updatedRequest.getReviewScore());
-
-            ReportLogger.info("Successfully updated video game");
-        } catch (Exception e) {
-            ReportLogger.error("Test failed", e);
-            throw e;
-        }
+        ReportLogger.info("Successfully updated video game");
     }
 
     @Test
@@ -104,24 +84,16 @@ public class VideoGamesTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void getVideoGameById() {
         Assumptions.assumeTrue(createdGameId != null, "Game ID should not be null");
+        ReportLogger.startTest("Get Video Game By ID");
 
-        try {
-            ReportLogger.startTest("Get Video Game By ID");
+        Response response = videoGameService.getVideoGameById(createdGameId);
+        ReportLogger.logResponse(response.getStatusCode(), response.getBody().asString());
 
-            // Act
-            Response response = videoGameService.getVideoGameById(createdGameId);
-            ReportLogger.logResponse(response.getStatusCode(), response.getBody().asString());
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        VideoGame game = response.as(VideoGame.class);
+        assertThat(game.getId()).isEqualTo(createdGameId);
 
-            // Assert
-            assertThat(response.getStatusCode()).isEqualTo(200);
-            VideoGame game = response.as(VideoGame.class);
-            assertThat(game.getId()).isEqualTo(createdGameId);
-
-            ReportLogger.info("Successfully retrieved video game by ID");
-        } catch (Exception e) {
-            ReportLogger.error("Test failed", e);
-            throw e;
-        }
+        ReportLogger.info("Successfully retrieved video game by ID");
     }
 
     @Test
@@ -130,23 +102,16 @@ public class VideoGamesTest extends BaseTest {
     @Description("Verify that all video games can be retrieved successfully")
     @Severity(SeverityLevel.CRITICAL)
     public void getAllVideoGames() {
-        try {
-            ReportLogger.startTest("Get All Video Games");
+        ReportLogger.startTest("Get All Video Games");
 
-            // Act
-            Response response = videoGameService.getAllVideoGames();
-            ReportLogger.logResponse(response.getStatusCode(), response.getBody().asString());
+        Response response = videoGameService.getAllVideoGames();
+        ReportLogger.logResponse(response.getStatusCode(), response.getBody().asString());
 
-            // Assert
-            assertThat(response.getStatusCode()).isEqualTo(200);
-            assertThat(response.getContentType()).containsIgnoringCase("application/json");
-            assertThat(response.jsonPath().getList("$")).isNotEmpty();
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        assertThat(response.getContentType()).containsIgnoringCase("application/json");
+        assertThat(response.jsonPath().getList("$")).isNotEmpty();
 
-            ReportLogger.info("Successfully retrieved all video games");
-        } catch (Exception e) {
-            ReportLogger.error("Test failed", e);
-            throw e;
-        }
+        ReportLogger.info("Successfully retrieved all video games");
     }
 
     @Test
@@ -156,25 +121,16 @@ public class VideoGamesTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     public void deleteVideoGame() {
         Assumptions.assumeTrue(createdGameId != null, "Game ID should not be null");
+        ReportLogger.startTest("Delete Video Game");
 
-        try {
-            ReportLogger.startTest("Delete Video Game");
+        Response response = videoGameService.deleteVideoGame(createdGameId);
+        ReportLogger.logResponse(response.getStatusCode(), response.getBody().asString());
 
-            // Act
-            Response response = videoGameService.deleteVideoGame(createdGameId);
-            ReportLogger.logResponse(response.getStatusCode(), response.getBody().asString());
+        assertThat(response.getStatusCode()).isEqualTo(200);
 
-            // Assert
-            assertThat(response.getStatusCode()).isEqualTo(200);
+        Response getResponse = videoGameService.getVideoGameById(createdGameId);
+        assertThat(getResponse.getStatusCode()).isEqualTo(404);
 
-            // Verify deletion
-            Response getResponse = videoGameService.getVideoGameById(createdGameId);
-            assertThat(getResponse.getStatusCode()).isEqualTo(404);
-
-            ReportLogger.info("Successfully deleted video game");
-        } catch (Exception e) {
-            ReportLogger.error("Test failed", e);
-            throw e;
-        }
+        ReportLogger.info("Successfully deleted video game");
     }
 }

@@ -8,12 +8,13 @@ import utils.ApiRequestSpecification;
 import static io.restassured.RestAssured.given;
 
 public class VideoGameService {
-    private final String basePath;
+    private static final ConfigLoader  config = ConfigLoader.getInstance();
+    private final String basePath = config.getProperty("api.base.url") + config.getProperty("api.endpoint.videogame");
 
     public VideoGameService() {
-        this.basePath = ConfigLoader.getInstance().getProperty("api.endpoint.videogames");
+        String baseUrl = ConfigLoader.getInstance().getProperty("api.base.url");
+        System.out.println("VideoGameService Base URL: " + baseUrl);
         System.out.println("VideoGameService Base Path: " + basePath);
-
     }
 
     public Response createVideoGame(VideoGameRequest request) {

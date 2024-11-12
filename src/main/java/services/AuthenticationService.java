@@ -1,5 +1,6 @@
 package services;
 
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import utils.ConfigLoader;
 import utils.ApiRequestSpecification;
@@ -7,8 +8,21 @@ import utils.ApiRequestSpecification;
 import static io.restassured.RestAssured.given;
 
 public class AuthenticationService {
-    private static final String AUTH_ENDPOINT = ConfigLoader.getInstance().getProperty("api.endpoint.authenticate");
-    private String authToken;
+    private static final ConfigLoader config = ConfigLoader.getInstance();
+    private static final String AUTH_ENDPOINT = "/authenticate";
+    private static String authToken;
+
+    // Singleton instance
+    private static AuthenticationService instance;
+
+    private AuthenticationService() {}
+
+    public static AuthenticationService getInstance() {
+        if (instance == null) {
+            instance = new AuthenticationService();
+        }
+        return instance;
+    }
 
     public String getAuthToken() {
         if (authToken == null) {
@@ -19,7 +33,7 @@ public class AuthenticationService {
 
     private String authenticate() {
         Response response = given()
-                .spec(ApiRequestSpecification.getAuthenticatedRequestSpec())
+                .spec(ApiRequestSpecification.getDefaultRequestSpec())
                 .body(createAuthRequestBody())
                 .post(AUTH_ENDPOINT);
 
@@ -33,23 +47,17 @@ public class AuthenticationService {
     }
 
     private String createAuthRequestBody() {
-        String username;
-        String password;
-
-        try {
-            username = ConfigLoader.getInstance().getProperty("api.auth.username");
-            password = ConfigLoader.getInstance().getProperty("api.auth.password");
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Failed to retrieve authentication properties: " + e.getMessage(), e);
-        }
+        String username = config.getProperty("api.auth.username");
+        String password = config.getProperty("api.auth.password");
 
         if (username == null || password == null) {
             throw new RuntimeException("Username or password not found in configuration");
         }
 
-        return String.format("{\n" +
-                "    \"username\": \"%s\",\n" +
-                "    \"password\": \"%s\"\n" +
-                "}", username, password);
+        return String.format("""
+                {
+                    "username": "%s",
+                    "password": "%s"
+                }""", username, password);
     }
 }
